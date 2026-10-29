@@ -18,8 +18,8 @@ const DIFFS = {
 
 const LEVELS = [
   { name: 'NORMAL',               tag: 'The dot moves slowly. Your cursor behaves. Enjoy it while it lasts.', speed: 110 },
-  //{ name: 'REVERSE',              tag: 'Left is right. Right is left. Sorry not sorry.',                       speed: 140, ix: true },
- // { name: 'CHAOS',                tag: 'Up is down too. Nothing is sacred anymore.',                           speed: 170, ix: true, iy: true },
+  { name: 'REVERSE',              tag: 'Left is right. Right is left. Sorry not sorry.',                       speed: 140, ix: true },
+ { name: 'CHAOS',                tag: 'Up is down too. Nothing is sacred anymore.',                           speed: 170, ix: true, iy: true },
   { name: 'TELEPORT',             tag: 'The dot dodges you. Catch it while it recharges.',                     speed: 150, ix: true, tp: true },
   { name: 'CLONE ATTACK',         tag: 'Decoys everywhere. Only one dot is real.',                             speed: 160, ix: true, iy: true, clones: true },
   { name: 'BOSS 1: THE DOT',      tag: 'The original dot returns with a vengeance and an attitude.',           speed: 175, boss: true, bType: 'dot' },
