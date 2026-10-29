@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="CATCH NOTHING: THE USELESSNESS ENGINE - The game you can never win.">
+  <title>CATCH NOTHING: THE USELESSNESS ENGINE</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="bg" aria-hidden="true">
+    <div class="grid"></div>
+    <div id="particles"></div>
+  </div>
+
+  <!-- TOP NEWS TICKER -->
+  <aside id="newsTickerBar" class="news-ticker-bar" aria-label="News ticker">
+    <span class="ticker-badge">🔴 BREAKING</span>
+    <div id="tickerText" class="ticker-content">BREAKING: Local player still chasing one pixel. Economists report zero
+      productivity.</div>
+  </aside>
+
+  <main id="app">
+
+    <!-- START / MENU SCREEN -->
+    <section id="menu" class="screen active" aria-labelledby="title">
+      <div class="menu-inner">
+        <div class="sub-badge">V2.0 — THE USELESSNESS ENGINE</div>
+        <h1 id="title" class="title"><span class="t-catch">CATCH</span> <span class="t-nothing">NOTHING</span></h1>
+        <p class="sub">Turning Effort Into Absolutely Nothing Since Never.</p>
+        <p class="tagline">"The most intentionally futile experience on the modern web."</p>
+
+        <div class="diff" role="radiogroup" aria-label="Difficulty">
+          <button type="button" role="radio" class="chip" data-diff="easy" aria-checked="false">Easy Nothing</button>
+          <button type="button" role="radio" class="chip" data-diff="medium" aria-checked="true">Medium Nothing</button>
+          <button type="button" role="radio" class="chip" data-diff="impossible" aria-checked="false">Impossible
+            Nothing</button>
+        </div>
+        <p id="diffNote" class="note"></p>
+
+        <button type="button" id="playBtn" class="btn primary huge">PLAY GAME</button>
+
+        <dl class="stats-row">
+          <div>
+            <dt>Best score</dt>
+            <dd id="mBest">0</dd>
+          </div>
+          <div>
+            <dt>Time wasted</dt>
+            <dd id="mWasted">0s</dd>
+          </div>
+          <div class="nc-stat">
+            <dt>NothingCoins</dt>
+            <dd id="mCoins">0 NC</dd>
+          </div>
+        </dl>
+
+        <!-- NAVIGATION HUB TO THE NEW FEATURES -->
+        <nav class="hub-grid" aria-label="Feature shortcuts">
+          <button type="button" class="hub-btn" id="openAiBtn">
+            <span class="ic">🧠</span>
+            <span>Ask AI Coach</span>
+            <small>Terrible advice</small>
+          </button>
+          <button type="button" class="hub-btn" id="openShopBtn">
+            <span class="ic">🛒</span>
+            <span>Nothing Shop</span>
+            <small>Spend fake coins</small>
+          </button>
+          <button type="button" class="hub-btn" id="openDeptBtn">
+            <span class="ic">🏛️</span>
+            <span>Govt Dept.</span>
+            <small>Form 404 permits</small>
+          </button>
+          <button type="button" class="hub-btn" id="openStatsBtn">
+            <span class="ic">📊</span>
+            <span>Absurd Stats</span>
+            <small>Useless metrics</small>
+          </button>
+          <button type="button" class="hub-btn" id="openAchBtn">
+            <span class="ic">🏅</span>
+            <span>Achievements</span>
+            <small id="achBadge">0/32</small>
+          </button>
+          <button type="button" class="hub-btn" id="openSupportBtn">
+            <span class="ic">🎧</span>
+            <span>Support</span>
+            <small>Guaranteed ignored</small>
+          </button>
+          <button type="button" class="hub-btn" id="openSocialBtn">
+            <span class="ic">📱</span>
+            <span>Dot's Socials</span>
+            <small>Pixel gossip</small>
+          </button>
+          <button type="button" class="hub-btn" id="openSettingsBtn">
+            <span class="ic">⚙️</span>
+            <span>Settings</span>
+            <small>Audio & Chaos</small>
+          </button>
+        </nav>
+
+        <ul class="how">
+          <li><b>Move:</b> Drag mouse or finger in the arena. The in-game cursor revolts in later levels.</li>
+          <li><b>Catch:</b> Click (or tap CATCH / press Space) to grab the dot. Fake dots deduct points.</li>
+          <li><b>Chaos:</b> Watch out for Mouse Betrayal, Chicken Invasions, and Useless Power-Ups.</li>
+          <li><b>Hotkeys:</b> <b>P</b> pauses. <b>Esc</b> releases mouse. Sound starts on your first click.</li>
+        </ul>
+
+        <div class="fake-reviews">
+          <h4>User Testimonials <span>Verified 0-Star Feedback</span></h4>
+          <div class="review-item">
+            <span>"1/10. I want my time back and my mouse is dizzy."</span>
+            <span class="review-stars">★☆☆☆☆</span>
+          </div>
+          <div class="review-item">
+            <span>"I caught nothing and I've never felt more fulfilled."</span>
+            <span class="review-stars">★★★★★</span>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+          <button type="button" id="soundBtn" class="btn ghost" aria-pressed="true">Sound: on</button>
+          <button type="button" id="fixEverythingBtn" class="btn sm danger">🔧 FIX EVERYTHING</button>
+          <button type="button" id="resetProgressBtn" class="btn sm danger">🗑️ RESET PROGRESS</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAME SCREEN -->
+    <section id="game" class="screen" aria-label="Game area">
+      <header class="hud">
+        <div class="lvl"><b id="hLevel">Level 1 — NORMAL</b><small id="hTag"></small></div>
+        <div class="stat"><span>Hits</span><b id="hHits">0/3</b></div>
+        <div class="stat" id="timerBox"><span>Time</span><b id="hTime">30</b></div>
+        <div class="stat"><span>Score</span><b id="hScore">0</b></div>
+        <div class="stat"><span>Misses</span><b id="hMiss">0</b></div>
+        <div class="stat gold"><span>Coins</span><b id="hCoins">0 NC</b></div>
+        <div class="ctrl">
+          <button type="button" id="gameAiBtn" class="btn sm cyan" title="Ask AI for advice">🧠 Ask AI</button>
+          <button type="button" id="pauseBtn" class="btn sm" aria-label="Pause game">Pause</button>
+          <button type="button" id="restartBtn" class="btn sm" aria-label="Reset or restart current run">🔄 Reset
+            Run</button>
+          <button type="button" id="menuBtn" class="btn sm" aria-label="Exit to main menu">Menu</button>
+          <button type="button" id="soundBtn2" class="btn sm" aria-label="Toggle sound"
+            aria-pressed="true">Sound</button>
+        </div>
+      </header>
+
+      <div id="arena" aria-label="Game area. Catch the glowing dot.">
+        <!-- RANDOM NONSENSE EVENT BANNER -->
+        <div id="eventBanner" role="status" aria-live="assertive">
+          <span id="eventIcon">⚡</span>
+          <span id="eventTitle">EVENT IN PROGRESS</span>
+        </div>
+
+        <!-- ENTITY / EFFECT CONTAINERS -->
+        <div id="eventEffects" aria-hidden="true"></div>
+
+        <!-- MAIN TARGET DOT -->
+        <div id="dot" class="dot"></div>
+
+        <!-- CUSTOM CURSOR -->
+        <div id="cursor" aria-hidden="true"></div>
+
+        <!-- CAT COMPANION -->
+        <div id="catCompanion" aria-label="Bartholomew the Indifferent Cat">
+          <div id="catBubble" class="cat-bubble">meow.</div>
+          <div class="cat-sprite">
+            <div class="cat-body"></div>
+            <div class="cat-head">
+              <div class="cat-ear l"></div>
+              <div class="cat-ear r"></div>
+              <div class="cat-eye l"></div>
+              <div class="cat-eye r"></div>
+            </div>
+            <div class="cat-tail"></div>
+          </div>
+        </div>
+
+        <!-- LEVEL BANNER -->
+        <div id="banner" aria-live="polite"></div>
+
+        <!-- SARCASTIC HUD MESSAGE -->
+        <p id="msg" class="msg" aria-live="polite"></p>
+
+        <!-- PAUSE OVERLAY -->
+        <div id="pauseOv" class="overlay" hidden>
+          <h2>PAUSE IS A SOCIAL CONSTRUCT</h2>
+          <p>The dot is catching its breath. Unlike you.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+            <button type="button" id="resumeBtn" class="btn primary">Resume</button>
+            <button type="button" id="pRestart" class="btn">Restart</button>
+            <button type="button" id="pMenu" class="btn ghost">Exit to menu</button>
+          </div>
+        </div>
+
+        <!-- VOID / BLACKOUT OVERLAY -->
+        <div id="voidOv" class="overlay void" hidden>
+          <p>There was never a dot.</p>
+        </div>
+      </div>
+
+      <button type="button" id="catchBtn" class="btn primary big"
+        aria-label="Catch at the cursor position">CATCH</button>
+    </section>
+
+    <!-- FAKE VICTORY SCREEN -->
+    <section id="fakeVictory" class="screen fake-vic-screen" aria-labelledby="vicTitle">
+      <div id="confettiBox" class="confetti-box" aria-hidden="true"></div>
+      <div class="fake-vic-inner">
+        <div style="font-size:3.5rem">🏆 🎉 🌟</div>
+        <h2 id="vicTitle" class="vic-title">CONGRATULATIONS!</h2>
+        <p id="vicSub" class="vic-sub">YOU HAVE ACHIEVED NOTHING!</p>
+        <p id="vicDesc" class="quote">"History will probably forget you, but your effort was theoretically witnessed."
+        </p>
+
+        <div
+          style="background:rgba(255,202,40,.15);border:1px solid var(--gold);padding:14px;border-radius:12px;margin:8px 0;width:100%;max-width:500px">
+          <b style="color:var(--gold);font-size:1.1rem;display:block">FAKE REWARD UNLOCKED:</b>
+          <span id="fakeRewardText">+10,000 Imaginary NothingCoins & Eternal Emptiness</span>
+        </div>
+
+        <div id="fakeRevokedStamp" class="fake-revoked-stamp">ACTUALLY, YOU LOST.</div>
+
+        <div id="vicBtns" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:14px">
+          <button type="button" id="acceptFakeLossBtn" class="btn danger big" style="display:none">Accept Defeat & Try
+            Again</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAME OVER SCREEN -->
+    <section id="over" class="screen" aria-labelledby="overTitle">
+      <div class="over-inner">
+        <h2 id="overTitle" class="over-title">GAME OVER</h2>
+        <p class="over-sub">YOU CAUGHT NOTHING!</p>
+        <p class="quote">"Bro, are you unemployed?"</p>
+        <p class="quote">"Your mouse deserves better."</p>
+        <p class="quote">"Your time: wasted successfully."</p>
+        <p class="quote ach-line">"Achievement unlocked: Professional Idiot."</p>
+        <p id="oReason" class="note"></p>
+
+        <dl class="stats-grid">
+          <div>
+            <dt>Score</dt>
+            <dd id="oScore">0</dd>
+          </div>
+          <div>
+            <dt>Misses</dt>
+            <dd id="oMisses">0</dd>
+          </div>
+          <div>
+            <dt>Time</dt>
+            <dd id="oTime">0:00</dd>
+          </div>
+          <div>
+            <dt>Levels cleared</dt>
+            <dd id="oLevels">0</dd>
+          </div>
+          <div>
+            <dt>Accuracy</dt>
+            <dd id="oAcc">0%</dd>
+          </div>
+          <div>
+            <dt>NothingCoins</dt>
+            <dd id="oCoins" style="color:var(--gold)">0 NC</dd>
+          </div>
+        </dl>
+
+        <p id="oNew" class="note"></p>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;width:100%">
+          <button type="button" id="againBtn" class="btn primary big">PLAY AGAIN — Because you learned nothing.</button>
+          <button type="button" id="viewCertBtn" class="btn gold">📜 View Certificate of Shame</button>
+          <button type="button" id="overMenuBtn" class="btn ghost">Main Menu</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICATE OF ABSOLUTE USELESSNESS SCREEN -->
+    <section id="certScreen" class="screen" aria-labelledby="certTitle">
+      <div class="cert-inner">
+        <div class="cert-frame">
+          <div class="cert-seal">Ø</div>
+          <div class="cert-header">
+            <p>The Department of Nothingness • Official Diploma</p>
+            <h2 id="certTitle">Certificate of Absolute Uselessness</h2>
+            <small id="certSerial">CERTIFICATE ID: DON-VOID-000000</small>
+          </div>
+
+          <p class="cert-verdict" id="certVerdict">
+            "This certifies that the bearer has demonstrated extraordinary incompetence and unyielding persistence in
+            chasing an elusive digital dot across a blank screen with absolutely zero benefit to human civilization."
+          </p>
+
+          <dl class="cert-stats">
+            <div>
+              <dt>Final Score</dt>
+              <dd id="cScore">0</dd>
+            </div>
+            <div>
+              <dt>Time Wasted</dt>
+              <dd id="cTime">0:00</dd>
+            </div>
+            <div>
+              <dt>Missed Clicks</dt>
+              <dd id="cMiss">0</dd>
+            </div>
+            <div>
+              <dt>Achievements</dt>
+              <dd id="cAch">0/32</dd>
+            </div>
+          </dl>
+
+          <div class="cert-signatures">
+            <div>
+              <b>Sir Arthur Pendelton</b><br>
+              <span>Minister of Pointless Endeavors</span>
+            </div>
+            <div>
+              <b>Dotothy Pixelton</b><br>
+              <span>Target in Abstentia</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px">
+          <button type="button" id="printCertBtn" class="btn gold">🖨️ PRINT MY SHAME</button>
+          <button type="button" id="shareCertBtn" class="btn cyan">📋 SHARE NOTHING</button>
+          <button type="button" id="certAgainBtn" class="btn primary">🔄 DO IT ALL AGAIN</button>
+          <button type="button" id="certMenuBtn" class="btn ghost">Return to Menu</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== MODALS SYSTEM ==================== -->
+
+  <!-- AI LIFE COACH MODAL -->
+  <div id="aiModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="aiTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="aiTitle">🧠 Useless AI Life Coach</h3>
+        <button type="button" class="modal-close" data-close="aiModal" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="ai-orb-container">
+          <div class="ai-orb"></div>
+          <small id="aiStatus" style="color:var(--cyan);font-weight:700">Connecting to existential neural
+            network...</small>
+        </div>
+        <div id="aiResponseBox" class="ai-dialog-box">
+          "Press 'Ask Life Coach' to consult the void."
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="askAiAgainBtn" class="btn primary">Ask Life Coach</button>
+        <button type="button" class="btn ghost" data-close="aiModal">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE NOTHING SHOP MODAL -->
+  <div id="shopModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="shopTitle">
+    <div class="modal-card" style="width:min(660px,100%)">
+      <div class="modal-header">
+        <h3 id="shopTitle">🛒 The Nothing Shop</h3>
+        <div style="font-family:var(--display);color:var(--gold);font-weight:800;font-size:1.1rem"
+          id="shopCoinsDisplay">0 NC</div>
+        <button type="button" class="modal-close" data-close="shopModal" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:.85rem;color:var(--mute)">Spend your hard-earned NothingCoins on items of absolute,
+          unequivocal uselessness. No real payments, ever.</p>
+        <div class="shop-grid" id="shopGrid">
+          <!-- populated dynamically -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn ghost" data-close="shopModal">Leave Empty-Handed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE DEPARTMENT OF NOTHINGNESS MODAL -->
+  <div id="deptModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="deptTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="deptTitle">🏛️ Dept. of Nothingness</h3>
+        <span class="dept-badge">BUREAUCRACY DIVISION</span>
+        <button type="button" class="modal-close" data-close="deptModal" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-box">
+          <h4 style="color:var(--pink)">FORM 404: APPLICATION FOR PERMISSION TO CATCH CIRCULAR PIXEL</h4>
+          <div class="form-row">
+            <label for="deptApplicantName">Applicant Designation</label>
+            <input type="text" id="deptApplicantName" class="form-input" value="Certified Unemployed Human" readonly>
+          </div>
+          <div class="form-row">
+            <label>Assigned Case Number</label>
+            <input type="text" id="deptCaseNum" class="form-input" value="DON-404-VOID-99" readonly>
+          </div>
+          <div class="form-row">
+            <label>Status of Incompetence</label>
+            <div id="deptStatus" style="font-weight:800;color:var(--cyan)">APPLICATION PENDING (EST. 47 YEARS)</div>
+          </div>
+          <div style="text-align:center;padding:8px 0" id="deptStampContainer">
+            <div class="dept-stamp">REJECTED</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button type="button" id="deptSubmitBtn" class="btn primary sm">Submit New Application</button>
+          <button type="button" id="deptPayFeeBtn" class="btn gold sm">Pay 10 NC Bureaucracy Fee</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn ghost" data-close="deptModal">File Away & Forget</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABSURD STATISTICS DASHBOARD MODAL -->
+  <div id="statsModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="statsTitle">
+    <div class="modal-card" style="width:min(640px,100%)">
+      <div class="modal-header">
+        <h3 id="statsTitle">📊 Absurd Statistics Dashboard</h3>
+        <button type="button" class="modal-close" data-close="statsModal" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="shop-grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
+          <div class="shop-item">
+            <span style="font-size:.75rem;color:var(--mute)">TOTAL CLICKS</span>
+            <b id="stClicks" style="font-size:1.4rem;color:var(--cyan)">0</b>
+          </div>
+          <div class="shop-item">
+            <span style="font-size:.75rem;color:var(--mute)">DOTS CAUGHT</span>
+            <b id="stCatches" style="font-size:1.4rem;color:var(--green)">0</b>
+          </div>
+          <div class="shop-item">
+            <span style="font-size:.75rem;color:var(--mute)">MISSED CLICKS</span>
+            <b id="stMisses" style="font-size:1.4rem;color:var(--pink)">0</b>
+          </div>
+          <div class="shop-item">
+            <span style="font-size:.75rem;color:var(--mute)">CURSOR DISTANCE</span>
+            <b id="stDist" style="font-size:1.4rem;color:var(--gold)">0 km</b>
+          </div>
+          <div class="shop-item">
+            <span style="font-size:.75rem;color:var(--mute)">FAKE VICTORIES</span>
+            <b id="stFakeWins" style="font-size:1.4rem;color:#b388ff">0</b>
+          </div>
+          <div class="shop-item">
+            <span style="font-size:.75rem;color:var(--mute)">USELESS POWER-UPS</span>
+            <b id="stPowerups" style="font-size:1.4rem;color:var(--cyan)">0</b>
+          </div>
+          <div class="shop-item">
+            <span style="font-size:.75rem;color:var(--mute)">AI COACH QUERIES</span>
+            <b id="stAiQueries" style="font-size:1.4rem;color:#80d8ff">0</b>
+          </div>
+          <div class="shop-item">
+            <span style="font-size:.75rem;color:var(--mute)">NONSENSE EVENTS</span>
+            <b id="stEvents" style="font-size:1.4rem;color:#ff80ab">0</b>
+          </div>
+        </div>
+
+        <div
+          style="background:rgba(10,6,19,.5);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:.85rem;display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;justify-content:space-between"><span>Productivity Lost:</span><b
+              style="color:var(--pink)">99.8%</b></div>
+          <div style="display:flex;justify-content:space-between"><span>NASA's Interest in Your
+              Score:</span><b>0.000%</b></div>
+          <div style="display:flex;justify-content:space-between"><span>Comparison to a Potato:</span><b
+              style="color:var(--gold)">Inconclusive</b></div>
+          <div style="display:flex;justify-content:space-between"><span>Global Impact:</span><b>None Detected</b></div>
+          <div style="display:flex;justify-content:space-between"><span>Career Progress:</span><b
+              style="color:var(--cyan)">Loading 99%...</b></div>
+          <div style="display:flex;justify-content:space-between"><span>Official Uselessness Rating:</span><b
+              style="color:var(--gold)">AAA+ (Supreme Idleness)</b></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn ghost" data-close="statsModal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACHIEVEMENTS MODAL -->
+  <div id="achModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="achModalTitle">
+    <div class="modal-card" style="width:min(660px,100%)">
+      <div class="modal-header">
+        <h3 id="achModalTitle">🏅 Useless Achievements</h3>
+        <span id="achModalCount" style="color:var(--gold);font-weight:800">(0/32)</span>
+        <button type="button" class="modal-close" data-close="achModal" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex;gap:6px;margin-bottom:6px">
+          <button type="button" class="chip" id="achFilterAll" aria-checked="true">All</button>
+          <button type="button" class="chip" id="achFilterUnlocked" aria-checked="false">Unlocked</button>
+          <button type="button" class="chip" id="achFilterLocked" aria-checked="false">Locked</button>
+        </div>
+        <ul id="achModalList" style="list-style:none;display:grid;gap:8px">
+          <!-- populated dynamically -->
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn ghost" data-close="achModal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOMER SUPPORT MODAL -->
+  <div id="supportModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="supportTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="supportTitle">🎧 24/7 Ignored Support</h3>
+        <span style="font-size:.78rem;color:var(--mute)">Agent Glitch #404</span>
+        <button type="button" class="modal-close" data-close="supportModal" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <label for="supportTopic">Select Your Futile Complaint</label>
+          <select id="supportTopic" class="form-input">
+            <option>The dot keeps running away from me.</option>
+            <option>The game is way too difficult.</option>
+            <option>I won, but the game insists I lost.</option>
+            <option>I have wasted three hours of my mortal life.</option>
+            <option>The mouse controls are completely broken.</option>
+            <option>I would like a full refund for my time.</option>
+            <option>Bartholomew the Cat insulted my dignity.</option>
+          </select>
+        </div>
+        <div class="support-chat" id="supportChat">
+          <div class="chat-msg agent">
+            <div class="chat-msg-bubble">Hello! Welcome to Catch Nothing Support. How may we completely fail to assist
+              you today?</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="submitTicketBtn" class="btn primary">File Ticket</button>
+        <button type="button" id="escalateTicketBtn" class="btn danger sm">Escalate to Senior Nothing</button>
+        <button type="button" class="btn ghost" data-close="supportModal">Give Up</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOT'S SOCIAL LIFE MODAL -->
+  <div id="socialModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="socialTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="socialTitle">📱 DotGram — @DotothyPixel</h3>
+        <button type="button" class="modal-close" data-close="socialModal" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div
+          style="display:flex;gap:14px;align-items:center;padding:10px;background:rgba(10,6,19,.5);border-radius:12px;border:1px solid var(--line)">
+          <div
+            style="width:52px;height:52px;border-radius:50%;background:radial-gradient(circle,#fff,var(--pink));box-shadow:0 0 15px var(--pink);flex-shrink:0">
+          </div>
+          <div>
+            <b style="font-size:1.1rem;display:block">Dotothy Pixelton (She/It)</b>
+            <span style="font-size:.8rem;color:var(--mute)">Status: "In an open relationship with the top-left
+              corner"</span>
+            <div style="font-size:.75rem;color:var(--cyan);margin-top:2px">1x1 Resolution • 999k Followers • 0 Catches
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px" id="socialFeed">
+          <!-- dynamically populated -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="likeDotPostBtn" class="btn primary sm">❤️ Like All Posts</button>
+        <button type="button" class="btn ghost" data-close="socialModal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div id="settingsModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="settingsTitle">⚙️ Absurd Settings</h3>
+        <button type="button" class="modal-close" data-close="settingsModal" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <label for="volSlider">Master Audio Synthesizer Volume</label>
+          <input type="range" id="volSlider" min="0" max="100" value="70" class="form-input">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+            <input type="checkbox" id="setRoastToggle" checked>
+            <span>Audience Roast Mode (Heckling on misses)</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+            <input type="checkbox" id="setCatToggle" checked>
+            <span>Bartholomew the Cat Companion</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+            <input type="checkbox" id="setTickerToggle" checked>
+            <span>Fake News Ticker</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+            <input type="checkbox" id="setEventsToggle" checked>
+            <span>Random Nonsense Events (Chickens, Disco, etc.)</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;color:var(--gold);font-weight:700">
+            <input type="checkbox" id="setPointlessToggle" checked>
+            <span>Make the Game 150% More Pointless</span>
+          </label>
+        </div>
+        <div style="border-top:1px solid var(--line);padding-top:12px;margin-top:6px">
+          <button type="button" id="settingsResetBtn" class="btn sm danger" style="width:100%">🗑️ Reset All Game Data &
+            Achievements</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn ghost" data-close="settingsModal">Save Preferences</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAKE SYSTEM ERROR MODAL -->
+  <div id="fakeErrorModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="fakeErrTitle">
+    <div class="modal-card" style="border:2px solid #ff1744">
+      <div class="modal-header" style="background:#ff1744;color:#fff">
+        <h3 id="fakeErrTitle">⚠️ CRITICAL FAILURE: TOO MUCH EFFORT DETECTED</h3>
+      </div>
+      <div class="modal-body" style="font-family:var(--mono)">
+        <p style="color:#ff80ab">A fatal exception 0x00000000 has occurred in module SKILL.DLL.</p>
+        <p id="fakeErrText">The dot has encountered an existential crisis and refuses to accept input.</p>
+        <p style="color:var(--mute);font-size:.8rem;margin-top:10px">Pressing ANY KEY will do absolutely nothing.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="dismissFakeErrorBtn" class="btn danger">Ignore & Pretend Everything Is Fine</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESET PROGRESS CONFIRMATION MODAL -->
+  <div id="resetModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="resetModalTitle">
+    <div class="modal-card" style="border:2px solid var(--red)">
+      <div class="modal-header" style="background:rgba(255,51,102,.2)">
+        <h3 id="resetModalTitle" style="color:var(--red)">⚠️ RESET ALL NOTHINGNESS?</h3>
+        <button type="button" class="modal-close" data-close="resetModal" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to reset all your hard-earned nothing?</p>
+        <ul style="list-style:disc;margin-left:20px;color:var(--mute);font-size:.85rem;display:grid;gap:4px">
+          <li>All 32 unlocked achievements</li>
+          <li>All NothingCoins balance</li>
+          <li>All purchased shop items</li>
+          <li>Best score and total time wasted</li>
+          <li>All statistics (clicks, misses, distance)</li>
+        </ul>
+        <p style="color:var(--pink);font-weight:700">Everything will be restored to absolute zero.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="confirmResetBtn" class="btn danger">Yes, Erase Everything</button>
+        <button type="button" class="btn ghost" data-close="resetModal">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOASTS CONTAINER -->
+  <div id="toasts" aria-live="polite"></div>
+
+  <script src="game.js"></script>
+</body>
+
+</html>
